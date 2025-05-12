@@ -1,0 +1,10 @@
+---
+services:
+  naas:
+    image: loadingdata.nl/example/naas
+    build:
+      dockerfile: Dockerfile
+    environment:
+      NAAS_PORT: 3939
+    ports:
+      - "3939:3939"
