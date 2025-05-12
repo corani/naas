@@ -1,8 +1,14 @@
 package api
 
 import (
+	"context"
 	"encoding/json"
+	"errors"
+	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -32,7 +38,35 @@ func Run(port string, debug bool) {
 	// `/no`: returns a random reason
 	router.Get("/no", noHandler)
 
-	http.ListenAndServe(":"+port, router)
+	server := &http.Server{
+		Addr:    ":" + port,
+		Handler: router,
+	}
+
+	go func() {
+		log.Printf("listening on: http://localhost:%s/", port)
+
+		if err := server.ListenAndServe(); err != nil {
+			if !errors.Is(err, http.ErrServerClosed) {
+				log.Fatalf("HTTP server error: %v", err)
+			}
+		}
+
+		log.Println("server closed")
+	}()
+
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
+	<-sigChan
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	if err := server.Shutdown(ctx); err != nil {
+		log.Fatalf("HTTP shutdown error: %v", err)
+	}
+
+	log.Println("HTTP shutdown completed")
 }
 
 func versionHandler(w http.ResponseWriter, r *http.Request) {
