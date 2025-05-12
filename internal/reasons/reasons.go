@@ -1,4 +1,4 @@
-package internal
+package reasons
 
 import (
 	_ "embed"
@@ -20,7 +20,7 @@ var reasons = sync.OnceValue(func() []string {
 	return reasons
 })
 
-func GetReason() string {
+func Get() string {
 	reasons := reasons()
 
 	// return a random reason
