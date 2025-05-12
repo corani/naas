@@ -15,10 +15,9 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/httprate"
 	"github.wdf.sap.corp/I331555/naasgo/cfg"
-	"github.wdf.sap.corp/I331555/naasgo/internal/reasons"
 )
 
-func Run(port string, debug bool) {
+func Run(getter func() string, port string, debug bool) {
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
 	router.Use(middleware.Recoverer)
@@ -36,7 +35,7 @@ func Run(port string, debug bool) {
 	router.Get("/version", versionHandler)
 
 	// `/no`: returns a random reason
-	router.Get("/no", noHandler)
+	router.Get("/no", noHandler(getter))
 
 	server := &http.Server{
 		Addr:    ":" + port,
@@ -88,17 +87,19 @@ func versionHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func noHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
+func noHandler(getter func() string) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
 
-	reason := struct {
-		Reason string `json:"reason"`
-	}{
-		Reason: reasons.Get(),
-	}
+		reason := struct {
+			Reason string `json:"reason"`
+		}{
+			Reason: getter(),
+		}
 
-	if err := json.NewEncoder(w).Encode(reason); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		if err := json.NewEncoder(w).Encode(reason); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
 	}
 }
