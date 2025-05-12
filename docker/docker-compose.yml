@@ -1,0 +1,8 @@
+---
+services:
+  naas:
+    image: ghcr.io/corani/naas:latest
+    environment:
+      NAAS_PORT: 3939
+    ports:
+      - "3939:3939"

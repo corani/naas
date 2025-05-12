@@ -1,0 +1,32 @@
+name: golangci-lint
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on: 
+  push: 
+    branches: 
+      - master
+  pull_request: 
+
+permissions: 
+  contents: read
+
+jobs: 
+  golangci: 
+    runs-on: ubuntu-latest
+    steps: 
+      - uses: actions/setup-go@v5
+        with: 
+          go-version-file: 'go.mod'
+
+      - uses: actions/checkout@v4
+
+      - name: Run go-build 
+        run: ./build.sh -b
+
+      - uses: golangci/golangci-lint-action@v6 
+        with: 
+          version: latest
+          only-new-issues: true
