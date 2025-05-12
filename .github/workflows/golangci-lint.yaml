@@ -6,24 +6,25 @@ concurrency:
 
 on: 
   push: 
-    branches: 
+    branches:
       - master
-  pull_request: 
+  pull_request:
 
-permissions: 
+permissions:
   contents: read
 
 jobs: 
-  golangci: 
+  golangci:
     runs-on: ubuntu-latest
     steps: 
-      - uses: actions/setup-go@v5
-        with: 
-          go-version-file: 'go.mod'
-
       - uses: actions/checkout@v4
 
-      - name: Run go-build 
+    steps:
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
+
+      - name: Run go-build
         run: ./build.sh -b
 
       - uses: golangci/golangci-lint-action@v8 
