@@ -1,76 +1,21 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
-	"net/http"
 	"os"
-	"time"
 
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
-	"github.com/go-chi/httprate"
-	"github.wdf.sap.corp/I331555/naasgo/cfg"
-	"github.wdf.sap.corp/I331555/naasgo/internal"
+	"github.wdf.sap.corp/I331555/naasgo/internal/api"
+	"github.wdf.sap.corp/I331555/naasgo/internal/cli"
 )
 
 func main() {
 	port := os.Getenv("NAAS_PORT")
+	debug := os.Getenv("NAAS_DEBUG")
 
-	// If no port is set, return one reason on the console.
-	if port == "" {
-		fmt.Println(internal.GetReason())
-
-		return
+	switch port {
+	case "":
+		// If no port is set, return one reason on the console.
+		cli.Run()
+	default:
+		api.Run(port, debug == "true")
 	}
-
-	router := chi.NewRouter()
-	router.Use(middleware.Logger)
-	router.Use(middleware.Recoverer)
-	router.Use(httprate.LimitByIP(100, time.Minute))
-
-	// `/ping`: health check endpoint
-	router.Use(middleware.Heartbeat("/ping"))
-
-	if os.Getenv("NAAS_DEBUG") == "true" {
-		// `/debug/pprof`: pprof profiler
-		router.Mount("/debug", middleware.Profiler())
-	}
-
-	router.Get("/version", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-
-		version := struct {
-			Version string `json:"version"`
-			Hash    string `json:"hash"`
-			Build   string `json:"build"`
-		}{
-			Version: cfg.Version(),
-			Hash:    cfg.Hash(),
-			Build:   cfg.Build(),
-		}
-
-		if err := json.NewEncoder(w).Encode(version); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		}
-	})
-
-	// `/no`: returns a random reason
-	router.Get("/no", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-
-		reason := struct {
-			Reason string `json:"reason"`
-		}{
-			Reason: internal.GetReason(),
-		}
-
-		if err := json.NewEncoder(w).Encode(reason); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		}
-	})
-
-	http.ListenAndServe(":"+port, router)
 }
