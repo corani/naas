@@ -17,9 +17,13 @@ import (
 	"github.wdf.sap.corp/I331555/naasgo/cfg"
 )
 
-func NewRouter(getter func() string, debug bool) http.Handler {
+func NewRouter(getter func() string, debug bool) *chi.Mux {
 	router := chi.NewRouter()
+	// Real IP middleware should be early in the chain
+	router.Use(middleware.RealIP)
 	router.Use(middleware.Logger)
+	// Timeout middleware should be after Logger, before Recoverer
+	router.Use(middleware.Timeout(1 * time.Second))
 	router.Use(middleware.Recoverer)
 	router.Use(httprate.LimitByIP(100, time.Minute))
 
