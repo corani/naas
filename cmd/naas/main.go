@@ -16,7 +16,7 @@ func main() {
 	switch port {
 	case "":
 		// If no port is set, return one reason on the console.
-		cli.Run(getter)
+		cli.Run(os.Stdout, getter)
 	default:
 		api.Run(getter, port, debug == "true")
 	}
