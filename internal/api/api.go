@@ -17,7 +17,7 @@ import (
 	"github.wdf.sap.corp/I331555/naasgo/cfg"
 )
 
-func Run(getter func() string, port string, debug bool) {
+func NewRouter(getter func() string, debug bool) http.Handler {
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
 	router.Use(middleware.Recoverer)
@@ -36,6 +36,12 @@ func Run(getter func() string, port string, debug bool) {
 
 	// `/no`: returns a random reason
 	router.Get("/no", noHandler(getter))
+
+	return router
+}
+
+func Run(getter func() string, port string, debug bool) {
+	router := NewRouter(getter, debug)
 
 	server := &http.Server{
 		Addr:    ":" + port,
