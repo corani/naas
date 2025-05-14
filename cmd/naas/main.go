@@ -26,7 +26,8 @@ func main() {
 	}
 
 	if *versionFlag {
-		fmt.Fprintf(os.Stdout, "Version: %s\nBuild: %s\nHash: %s\n", cfg.Version(), cfg.Build(), cfg.Hash())
+		//nolint:errcheck
+		fmt.Printf("Version: %s\nBuild: %s\nHash: %s\n", cfg.Version(), cfg.Build(), cfg.Hash())
 
 		return
 	}
