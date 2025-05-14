@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.0.3](https://github.com/corani/naas/tree/v0.0.3) (2025-05-14)
+
+[Full Changelog](https://github.com/corani/naas/compare/v0.0.2...v0.0.3)
+
+**Merged pull requests:**
+
+- feat: add web handler on the root [\#12](https://github.com/corani/naas/pull/12) ([corani](https://github.com/corani))
+
 ## [v0.0.2](https://github.com/corani/naas/tree/v0.0.2) (2025-05-13)
 
 [Full Changelog](https://github.com/corani/naas/compare/v0.0.1...v0.0.2)
