@@ -4,5 +4,6 @@ services:
     image: ghcr.io/corani/naas:latest
     environment:
       NAAS_PORT: 3939
+    entrypoint: ["/usr/bin/naas", "-serve"]
     ports:
       - "3939:3939"
