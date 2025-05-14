@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NAAS - Random Reason</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f6f8fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .container {
+            min-width: 320px;
+            width: calc(100vw - 160px);
+            margin: 80px auto 0 auto;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 2.5rem 2rem 2rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: none;
+        }
+        .reason {
+            font-size: 1.5rem;
+            color: #3a3a40;
+            margin-bottom: 2.2rem;
+            text-align: center;
+            min-height: 3.5em;
+            min-width: 16em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s;
+        }
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            color: #22223b;
+        }
+        .reason {
+            font-size: 1.5rem;
+            color: #3a3a40;
+            margin-bottom: 2.2rem;
+            text-align: center;
+            min-height: 3.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s;
+        }
+        .reason-animate {
+            animation: reasonFade 0.5s;
+        }
+        @keyframes reasonFade {
+            0% {
+                opacity: 0;
+                transform: scale(0.96);
+            }
+            60% {
+                opacity: 1;
+                transform: scale(1.04);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        button {
+            background: none;
+            border: none;
+            border-radius: 8px;
+            padding: 0.9em 1.6em;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: none;
+        }
+        .clipboard-emoji {
+            display: inline-block;
+            filter: grayscale(1);
+            transition: transform 0.15s, filter 0.15s, color 0.15s;
+        }
+        .thumbs-btn:hover .clipboard-emoji {
+            transform: scale(1.25) rotate(-12deg);
+            filter: grayscale(0) drop-shadow(0 2px 6px #0002);
+        }
+        .clipboard-emoji.bounce {
+            animation: thumbsJump 0.38s cubic-bezier(.68,-0.55,.27,1.55);
+        }
+        .footer {
+            margin-top: 2.5rem;
+            color: #aaa;
+            font-size: 0.93rem;
+            text-align: center;
+        }
+        .footer a {
+            color: inherit;
+            text-decoration: underline dotted;
+            font-weight: normal;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        .footer a:hover {
+            opacity: 1;
+        }
+        .thumbs-btn {
+            background: none;
+            border: none;
+            padding: 0;
+            margin-bottom: 1.5rem;
+            font-size: 2.2rem;
+            line-height: 1;
+            cursor: pointer;
+            box-shadow: none;
+            transition: transform 0.15s, filter 0.15s;
+        }
+        .thumbs-emoji {
+            display: inline-block;
+            filter: grayscale(1);
+            transition: transform 0.15s, filter 0.15s, color 0.15s;
+        }
+        .thumbs-btn:hover .thumbs-emoji {
+            transform: scale(1.25) rotate(-12deg);
+            filter: grayscale(0) drop-shadow(0 2px 6px #0002);
+        }
+        .thumbs-emoji.bounce {
+            animation: thumbsJump 0.38s cubic-bezier(.68,-0.55,.27,1.55);
+        }
+        @keyframes thumbsJump {
+            0%   { transform: translateY(0) scale(1); }
+            20%  { transform: translateY(-18px) scale(1.15); }
+            40%  { transform: translateY(-28px) scale(1.1); }
+            55%  { transform: translateY(-18px) scale(1.12); }
+            70%  { transform: translateY(-8px)  scale(1.05); }
+            85%  { transform: translateY(-2px)  scale(1.01); }
+            100% { transform: translateY(0) scale(1); }
+        }
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: #181a1b;
+            }
+            .container {
+                background: #23272e;
+                box-shadow: 0 4px 24px rgba(0,0,0,0.32);
+            }
+            h1 {
+                color: #e0e6ed;
+            }
+            .reason {
+                color: #e0e6ed;
+            }
+            .footer {
+                color: #888;
+            }
+            button {
+                background: none;
+            }
+            button:hover {
+                background: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Why? <span id="why-emoji" aria-label="thinking" title="thinking">🤔</span></h1>
+        <div class="reason" id="reason">Loading...</div>
+        <div style="display: flex; gap: 1.2em; align-items: center; margin-bottom: 1.5rem;">
+            <button id="refreshBtn" aria-label="Not satisfied, get another reason" title="Not satisfied, get another reason" class="thumbs-btn">
+                <span role="img" aria-label="thumbs down" title="Not satisfied" class="thumbs-emoji">👎</span>
+            </button>
+            <button id="share" title="Copy reason to clipboard" tabindex="0" class="thumbs-btn">
+                <span role="img" aria-label="clipboard" title="Copy to clipboard" class="clipboard-emoji">📋</span>
+            </button>
+        </div>
+        <div class="footer">
+            Powered by <a href="https://github.com/corani/naas" target="_blank" rel="noopener noreferrer">NAAS</a>
+        </div>
+    </div>
+    <div id="toast" style="
+        display:none;
+        position: fixed;
+        left: 50%;
+        bottom: 48px;
+        transform: translateX(-50%);
+        background: #22223b;
+        color: #fff;
+        padding: 0.7em 1.6em;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        box-shadow: 0 2px 12px #0002;
+        z-index: 9999;
+        opacity: 0;
+        transition: opacity 0.3s, bottom 0.3s;
+    "></div>
+    <script>
+        const whyEmojis = [
+            {emoji: '🤔', label: 'thinking'},
+            {emoji: '😅', label: 'sweating'},
+            {emoji: '🤷', label: 'shrug'},
+            {emoji: '😜', label: 'winking'},
+            {emoji: '🧐', label: 'curious'},
+            {emoji: '🙃', label: 'upside-down'},
+            {emoji: '😏', label: 'smirking'},
+            {emoji: '😬', label: 'grimacing'},
+            {emoji: '😇', label: 'innocent'}
+        ];
+
+        function setRandomWhyEmoji() {
+            const emojiSpan = document.getElementById('why-emoji');
+            const idx = Math.floor(Math.random() * whyEmojis.length);
+            const {emoji, label} = whyEmojis[idx];
+            emojiSpan.textContent = emoji;
+            emojiSpan.setAttribute('aria-label', label);
+            emojiSpan.setAttribute('title', label);
+        }
+
+        async function fetchReason() {
+            setRandomWhyEmoji();
+            const reasonDiv = document.getElementById('reason');
+            reasonDiv.classList.remove('reason-animate');
+            reasonDiv.textContent = 'Loading...';
+            try {
+                const res = await fetch('/no');
+                if (!res.ok) throw new Error('Failed to fetch reason');
+                const data = await res.json();
+                reasonDiv.textContent = data.reason || 'No reason found.';
+                // Trigger animation
+                void reasonDiv.offsetWidth; // force reflow
+                reasonDiv.classList.add('reason-animate');
+            } catch (err) {
+                reasonDiv.textContent = 'Error fetching reason.';
+            }
+        }
+        function triggerRefresh() {
+            const emoji = document.querySelector('.thumbs-emoji');
+            emoji.classList.remove('bounce');
+            // force reflow to restart animation
+            void emoji.offsetWidth;
+            emoji.classList.add('bounce');
+            fetchReason();
+        }
+
+        // Share button logic
+        function copyReasonToClipboard() {
+            const reasonDiv = document.getElementById('reason');
+            const text = reasonDiv.textContent.trim();
+            if (!text || text === 'Loading...' || text === 'Error fetching reason.') return;
+            navigator.clipboard.writeText(text).then(() => {
+                showShareFeedback();
+            });
+        }
+        function showShareFeedback() {
+            const share = document.getElementById('share');
+            const clipboard = share.querySelector('.clipboard-emoji');
+            clipboard.classList.remove('bounce');
+            // force reflow to restart animation
+            void clipboard.offsetWidth;
+            clipboard.classList.add('bounce');
+            showToast('✔️ Copied!');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.opacity = '1';
+                toast.style.bottom = '64px';
+            }, 10);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.bottom = '48px';
+                setTimeout(() => {
+                    toast.style.display = 'none';
+                }, 300);
+            }, 1200);
+        }
+        const shareBtn = document.getElementById('share');
+        shareBtn.addEventListener('click', function() {
+            const clipboard = shareBtn.querySelector('.clipboard-emoji');
+            clipboard.classList.remove('bounce');
+            void clipboard.offsetWidth;
+            clipboard.classList.add('bounce');
+            copyReasonToClipboard();
+        });
+        shareBtn.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                const clipboard = shareBtn.querySelector('.clipboard-emoji');
+                clipboard.classList.remove('bounce');
+                void clipboard.offsetWidth;
+                clipboard.classList.add('bounce');
+                copyReasonToClipboard();
+            }
+        });
+        document.getElementById('refreshBtn').addEventListener('click', triggerRefresh);
+        window.addEventListener('DOMContentLoaded', fetchReason);
+
+        // Keyboard accessibility: Space/Enter triggers refresh
+        document.addEventListener('keydown', function(e) {
+            if (e.code === 'Space' || e.code === 'Enter') {
+                e.preventDefault();
+                triggerRefresh();
+            }
+        });
+    </script>
+</body>
+</html>

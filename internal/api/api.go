@@ -11,10 +11,10 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/corani/naas/cfg"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/httprate"
-	"github.wdf.sap.corp/I331555/naasgo/cfg"
 )
 
 func NewRouter(getter func() string, debug bool) *chi.Mux {
@@ -40,6 +40,11 @@ func NewRouter(getter func() string, debug bool) *chi.Mux {
 
 	// `/no`: returns a random reason
 	router.Get("/no", noHandler(getter))
+
+	// Serve static files from embedded FS at root
+	router.NotFound(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		StaticFileServer().ServeHTTP(w, r)
+	}))
 
 	return router
 }

@@ -1,4 +1,4 @@
-module github.wdf.sap.corp/I331555/naasgo
+module github.com/corani/naas
 
 go 1.24.3
 

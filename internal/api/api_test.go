@@ -74,8 +74,11 @@ func TestDebugProfilerRoute_Disabled(t *testing.T) {
 
 	router.ServeHTTP(w, req)
 
-	require.NotEqual(t, http.StatusOK, w.Code,
-		"expected non-200 status when debug is false")
+	// Should serve the error page (index.html or error.html), not a 404
+	require.Equal(t, http.StatusNotFound, w.Code,
+		"expected status 404 when debug is false")
+	require.Contains(t, w.Body.String(), "Powered by",
+		"expected error page content when debug is false")
 }
 
 func TestTimeoutMiddleware(t *testing.T) {
