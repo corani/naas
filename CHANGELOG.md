@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.0.4](https://github.com/corani/naas/tree/v0.0.4) (2025-05-14)
+
+[Full Changelog](https://github.com/corani/naas/compare/v0.0.3...v0.0.4)
+
+**Merged pull requests:**
+
+- feat: use flags to switch cli to api [\#13](https://github.com/corani/naas/pull/13) ([corani](https://github.com/corani))
+
 ## [v0.0.3](https://github.com/corani/naas/tree/v0.0.3) (2025-05-14)
 
 [Full Changelog](https://github.com/corani/naas/compare/v0.0.2...v0.0.3)
