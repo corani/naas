@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NAAS - Random Reason</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f6f8fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .container {
+            min-width: 320px;
+            width: calc(100vw - 160px);
+            margin: 80px auto 0 auto;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 2.5rem 2rem 2rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: none;
+        }
+        .reason {
+            font-size: 1.5rem;
+            color: #3a3a40;
+            margin-bottom: 2.2rem;
+            text-align: center;
+            min-height: 3.5em;
+            min-width: 16em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s;
+        }
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            color: #22223b;
+        }
+        .reason {
+            font-size: 1.5rem;
+            color: #3a3a40;
+            margin-bottom: 2.2rem;
+            text-align: center;
+            min-height: 3.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s;
+        }
+        .reason-animate {
+            animation: reasonFade 0.5s;
+        }
+        @keyframes reasonFade {
+            0% {
+                opacity: 0;
+                transform: scale(0.96);
+            }
+            60% {
+                opacity: 1;
+                transform: scale(1.04);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        button {
+            background: #3b82f6;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 0.9em 1.6em;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #2563eb;
+        }
+        .footer {
+            margin-top: 2.5rem;
+            color: #aaa;
+            font-size: 0.93rem;
+            text-align: center;
+        }
+        .footer a {
+            color: inherit;
+            text-decoration: underline dotted;
+            font-weight: normal;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        .footer a:hover {
+            opacity: 1;
+        }
+        .thumbs-btn {
+            background: none;
+            border: none;
+            padding: 0;
+            margin-bottom: 1.5rem;
+            font-size: 2.2rem;
+            line-height: 1;
+            cursor: pointer;
+            box-shadow: none;
+            transition: transform 0.15s, filter 0.15s;
+        }
+        .thumbs-emoji {
+            display: inline-block;
+            filter: brightness(0.7);
+            transition: transform 0.15s, filter 0.15s;
+        }
+        .thumbs-btn:hover .thumbs-emoji {
+            transform: scale(1.25) rotate(-12deg);
+            filter: brightness(1) drop-shadow(0 2px 6px #0002);
+        }
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: #181a1b;
+            }
+            .container {
+                background: #23272e;
+                box-shadow: 0 4px 24px rgba(0,0,0,0.32);
+            }
+            h1 {
+                color: #e0e6ed;
+            }
+            .reason {
+                color: #e0e6ed;
+            }
+            .footer {
+                color: #888;
+            }
+            button {
+                background: #22336b;
+                color: #fff;
+            }
+            button:hover {
+                background: #3b82f6;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Why? <span aria-label="thinking" title="thinking">🤔</span></h1>
+        <div class="reason" id="reason">Loading...</div>
+        <button id="refreshBtn" aria-label="Not satisfied, get another reason" title="Not satisfied, get another reason" class="thumbs-btn">
+            <span role="img" aria-label="thumbs down" title="Not satisfied" class="thumbs-emoji">👎</span>
+        </button>
+        <div class="footer">
+            Powered by <a href="https://github.com/corani/naas" target="_blank" rel="noopener noreferrer">NAAS</a>
+        </div>
+    </div>
+    <script>
+        async function fetchReason() {
+            const reasonDiv = document.getElementById('reason');
+            reasonDiv.classList.remove('reason-animate');
+            reasonDiv.textContent = 'Loading...';
+            try {
+                const res = await fetch('/no');
+                if (!res.ok) throw new Error('Failed to fetch reason');
+                const data = await res.json();
+                reasonDiv.textContent = data.reason || 'No reason found.';
+                // Trigger animation
+                void reasonDiv.offsetWidth; // force reflow
+                reasonDiv.classList.add('reason-animate');
+            } catch (err) {
+                reasonDiv.textContent = 'Error fetching reason.';
+            }
+        }
+        document.getElementById('refreshBtn').addEventListener('click', fetchReason);
+        window.addEventListener('DOMContentLoaded', fetchReason);
+    </script>
+</body>
+</html>

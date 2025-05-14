@@ -3,9 +3,9 @@ package main
 import (
 	"os"
 
-	"github.wdf.sap.corp/I331555/naasgo/internal/api"
-	"github.wdf.sap.corp/I331555/naasgo/internal/cli"
-	"github.wdf.sap.corp/I331555/naasgo/internal/reasons"
+	"github.com/corani/naas/internal/api"
+	"github.com/corani/naas/internal/cli"
+	"github.com/corani/naas/internal/reasons"
 )
 
 func main() {
