@@ -6,13 +6,37 @@ Not intended for productive usage, though requests are logged and limited by IP 
 
 ## Usage
 
+
 Build using `./build.sh -b`
 
-Run as a cli with `./bin/naas`
+Run as a CLI (prints a random reason):
 
-Run as a service with `NAAS_PORT=3939 ./bin/naas`
+```console
+$ ./bin/naas
+╭───────────────────────────────────────────────────────────────╮
+│                                                               │
+│ 👎  I've never been so sure of anything as I am of saying no. │
+│                                                               │
+╰───────────────────────────────────────────────────────────────╯
+```
 
-Run using docker-compose: `docker-compose -f docker/docker-compose.yml up`
+Run as a service (API and web UI):
+
+```sh
+NAAS_PORT=3939 ./bin/naas -serve
+```
+
+Run using docker-compose:
+
+```sh
+docker-compose -f docker/docker-compose.yml up
+```
+
+This will start the service with the `-serve` flag automatically.
+
+## Web UI
+
+The service includes a simple web UI for exploring the reasons interactively. Open your browser and navigate to [http://localhost:3939](http://localhost:3939) (or the port you configured) after starting the service. The UI is served from the root path (`/`) and allows you to get random reasons with a button click.
 
 ## Endpoints
 

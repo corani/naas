@@ -15,8 +15,8 @@ func TestRun_PrintsGetterOutput(t *testing.T) {
 	Run(&buf, getter)
 
 	got := buf.String()
-	want := "hello, world\n"
+	want := "hello, world"
 
-	require.Equal(t, want, got,
-		"Run() output mismatch")
+	require.Contains(t, got, want,
+		"Run() output should contain the reason text")
 }
