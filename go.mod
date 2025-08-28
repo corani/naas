@@ -7,7 +7,7 @@ require (
 	github.com/go-chi/chi/v5 v5.2.3
 	github.com/go-chi/httprate v0.15.0
 	github.com/mattn/go-isatty v0.0.20
-	github.com/stretchr/testify v1.11.0
+	github.com/stretchr/testify v1.11.1
 	golang.org/x/term v0.34.0
 )
 
