@@ -32,7 +32,7 @@ require (
 	golang.org/x/sys v0.35.0 // indirect
 	golang.org/x/tools v0.36.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	mvdan.cc/gofumpt v0.9.0 // indirect
+	mvdan.cc/gofumpt v0.9.1 // indirect
 )
 
 tool mvdan.cc/gofumpt
