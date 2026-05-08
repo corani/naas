@@ -1,6 +1,6 @@
 module github.com/corani/naas
 
-go 1.24.3
+go 1.25.0
 
 require (
 	github.com/charmbracelet/lipgloss v1.1.0
@@ -8,7 +8,7 @@ require (
 	github.com/go-chi/httprate v0.15.0
 	github.com/mattn/go-isatty v0.0.20
 	github.com/stretchr/testify v1.11.1
-	golang.org/x/term v0.36.0
+	golang.org/x/term v0.43.0
 )
 
 require (
@@ -29,7 +29,7 @@ require (
 	github.com/zeebo/xxh3 v1.0.2 // indirect
 	golang.org/x/mod v0.29.0 // indirect
 	golang.org/x/sync v0.17.0 // indirect
-	golang.org/x/sys v0.37.0 // indirect
+	golang.org/x/sys v0.44.0 // indirect
 	golang.org/x/tools v0.38.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	mvdan.cc/gofumpt v0.9.2 // indirect
